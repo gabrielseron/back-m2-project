@@ -57,7 +57,7 @@ export const registerMiddleware = (req: Request, res: Response, next: () => void
 
     } catch (error)
     {
-        return res.status(401).json( {error: true, message: (error as any).message}).end();
+        return res.status(400).json( {error: true, message: (error as any).message}).end();
     }
 }
 
@@ -98,6 +98,6 @@ export const loginMiddleware = (req: Request, res: Response, next: () => void) =
 
     } catch (error)
     {
-        return res.status(401).json({ error: true, message: (error as any).message }).end();
+        return res.status(400).json({ error: true, message: (error as any).message }).end();
     }
 }
