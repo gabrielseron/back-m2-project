@@ -21,9 +21,7 @@ export const authMiddleware = (req: Request, res: Response, next: () => void) =>
 export const registerMiddleware = (req: Request, res: Response, next: () => void) =>
 {
     let data: any = req.body;
-
-    //todo change fields
-    const champsRequire = [`nameUser`, `mailUser`, `passUser`, `rePassUser`]
+    const champsRequire = [`email`, `password`, `rePassword`]
 
     try
     {
@@ -46,12 +44,12 @@ export const registerMiddleware = (req: Request, res: Response, next: () => void
             throw new Error(`Les champs ${textError} sont manquant!`)
         }
 
-        if (champsRequire[2] !== champsRequire[3])
+        if (data.password !== data.rePassword)
             throw new Error(`Les mots de passe ne correspondent pas`)
 
-        if (EmailException.checkEmail(data.mailUser))
+        if (EmailException.checkEmail(data.email))
             throw new EmailException();
-        if (!PasswordException.isValidPassword(data.passUser))
+        if (!PasswordException.isValidPassword(data.password))
             throw new PasswordException();
 
         next()
@@ -66,9 +64,7 @@ export const registerMiddleware = (req: Request, res: Response, next: () => void
 export const loginMiddleware = (req: Request, res: Response, next: () => void) =>
 {
     let data: any = req.body;
-
-    //todo change fields
-    const champsRequire = [`mailUser`, `passUser`]
+    const champsRequire = [`email`, `password`]
 
     try
     {
@@ -92,10 +88,10 @@ export const loginMiddleware = (req: Request, res: Response, next: () => void) =
             throw new Error(`${textError} is missing`)
         }
 
-        if (EmailException.checkEmail(data.mailUser)) // Check valid syntaxe email
+        if (EmailException.checkEmail(data.email)) // Check valid syntaxe email
             throw new EmailException();
         
-        if (!PasswordException.isValidPassword(data.passUser)) // Check valid syntaxe password
+        if (!PasswordException.isValidPassword(data.password)) // Check valid syntaxe password
             throw new PasswordException();
 
         next()
