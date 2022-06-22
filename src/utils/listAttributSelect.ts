@@ -2,7 +2,7 @@ export type listeTables = "user"  | "promo" | "challenge" | "exercise" | 'result
 
 interface attributSelectInterface
 {
-    primaryKey: string;
+    primaryKey ? : string;
     attribut: Array < string > ;
 }
 
@@ -29,7 +29,6 @@ const listAttributSelect: Record < listeTables, attributSelectInterface > = { //
     },
     "results":
     {
-        primaryKey: `id_challenge`,
         attribut: [`id_challenge`, `result`, `id_user`]
     }
 };

@@ -1,53 +1,34 @@
 import MySQL from '../db/MySQL';
 
-export default class User
+export default class Challenge
 {
-    protected id_user ? : number | null;
-    public email: string;
-    public password: string;
-    public verified_email ? : boolean;
-    public id_promo ? : number;
-    public is_admin ? : boolean;
-    public refresh_token ? : string | null;
+    protected 'id_challenge' ? : number | null;
+    public 'id_promo': number | null;
+    public 'name_challenge': string;
 
-    protected table: string = 'user';
+    protected table: string = 'challenge';
+
 
     /**
      * Creates an instance of Personne.
-     * @param {(User(instance) | null)} id
-     * @param {string} [email='']
-     * @param {string} [password='']
-     * @param {boolean} [verified_email=false]
-     * @param {number} [id_promo=1]
-     * @param {boolean} [is_admin=false]
-     * @param {string} [refresh_token='']
-     * @memberof User
+     * @param {(Challenge(instance) | null)} id
+     * @param {number} [id_promo='']
+     * @param {string} [name_challenge='']
+     * @memberof Challenge
      */
 
     constructor(
-        user: User | null, 
-        email: string = '',
-        password: string = '',
-        verified_email : boolean = false,
-        id_promo : number = 1,
-        is_admin : boolean = false,
-        refresh_token : string = ""
+        challenge: Challenge | null, 
+        id_promo: number = 1,
+        name_challenge: string = '',
     ) {
-        if (user === null) {
-            this.email = email.trim();
-            this.password = password;
-            this.verified_email = verified_email;
+        if (challenge === null) {
             this.id_promo = id_promo;
-            this.is_admin = is_admin;
-            this.refresh_token = refresh_token;
+            this.name_challenge = name_challenge.trim();
         } else {
-            this.id_user = user.id_user;
-            this.email = user.email;
-            this.password = user.password;
-            this.verified_email = user.verified_email;
-            this.id_promo = user.id_promo;
-            this.is_admin = user.is_admin;
-            this.refresh_token = user.refresh_token;
+            this.id_challenge = challenge.id_challenge;
+            this.id_promo = challenge.id_promo;
+            this.name_challenge = challenge.name_challenge;
         }
     }
 
@@ -56,27 +37,15 @@ export default class User
 
 
     get id(): number {
-        return < number > this.id_user;
+        return < number > this.id_challenge;
     }
 
-    get emailUser(): string {
-        return this.email;
-    }
-
-    get isAdmin(): boolean {
-        return this.is_admin || false;
-    }
-
-    get isVerified(): boolean {
-        return this.verified_email || false;
-    }
-
-    get idPromo(): number | undefined {
+    get idPromo(): number | null {
         return this.id_promo;
     }
 
-    get refreshToken(): string | null | undefined {
-        return this.refresh_token;
+    get name(): string {
+        return this.name_challenge;
     }
 
     /**
@@ -84,10 +53,10 @@ export default class User
      * Return the attribut for the register property in the MySQL Class
      * @readonly
      * @type {Array < string >}
-     * @memberof User
+     * @memberof Challenge
      */
     get attributInsert(): Array < string > {
-        return ['email', 'password', 'verified_email', 'id_promo', 'is_admin', 'refresh_token']
+        return ['id_challenge', 'id_promo', 'name_challenge']
     }
 
     /************************* METHOD *************************/
