@@ -32,7 +32,7 @@ services:
       # Pointer vers un dossier qui aura des scripts d'initialisation de notre base
       - ./dbms/dev-initdb.d:/docker-entrypoint-initdb.d
       # Ajouter le DDL qui va tourner en dernier
-      - ./dbms/ddl/ddl.sql:/docker-entrypoint-initdb.d/999-ddl.sql
+      - ./dbms/ddl/challenge.sql:/docker-entrypoint-initdb.d/999-challenge.sql
     networks:
       - app-network
 

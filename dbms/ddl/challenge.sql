@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `challenge` (
   `id_challenge` int(11) NOT NULL,
   `id_promo` int(11) NOT NULL,
   `name_challenge` text COLLATE utf8_unicode_520_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_520_ci;
+);
 
 -- --------------------------------------------------------
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `exercise` (
   `points_exercise` int(11) NOT NULL,
   `order_exercise` int(11) NOT NULL,
   `id_challenge` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_520_ci;
+);
 
 -- --------------------------------------------------------
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `exercise` (
 CREATE TABLE IF NOT EXISTS `promo` (
   `id_promo` int(11) NOT NULL,
   `promo_name` text COLLATE utf8_unicode_520_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_520_ci;
+);
 
 -- --------------------------------------------------------
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `results` (
   `id_challenge` int(11) NOT NULL,
   `result` int(11) NOT NULL,
   `id_user` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_520_ci;
+);
 
 -- --------------------------------------------------------
 
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `verified_email` tinyint(1) NOT NULL,
   `id_promo` int(11) DEFAULT NULL,
   `refresh_token` text COLLATE utf8_unicode_520_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_520_ci;
+);
 
 --
 -- Index pour les tables exportées
