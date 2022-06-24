@@ -16,7 +16,7 @@ services:
 
 
   dbms:
-    image: mariadb
+    image: mariadb:10.7.4
     restart: always
     ports:
       - "3309:3306"

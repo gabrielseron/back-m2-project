@@ -1,21 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 4.5.4.1
--- http://www.phpmyadmin.net
---
--- Client :  localhost
--- Généré le :  Mer 22 Juin 2022 à 10:01
--- Version du serveur :  5.7.11
--- Version de PHP :  7.0.3
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
 -- Base de données :  `challenge`
 --
@@ -29,7 +11,9 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `challenge` (
   `id_challenge` int(11) NOT NULL,
   `id_promo` int(11) NOT NULL,
-  `name_challenge` text COLLATE utf8_unicode_520_ci NOT NULL
+  `name_challenge` text NOT NULL,
+  primary key(userId)
+
 );
 
 -- --------------------------------------------------------
@@ -40,10 +24,10 @@ CREATE TABLE IF NOT EXISTS `challenge` (
 
 CREATE TABLE IF NOT EXISTS `exercise` (
   `id_exercise` int(11) NOT NULL,
-  `name_exercise` text COLLATE utf8_unicode_520_ci NOT NULL,
-  `question_exercise` text COLLATE utf8_unicode_520_ci NOT NULL,
-  `request_exercise` text COLLATE utf8_unicode_520_ci NOT NULL,
-  `result_exercise` text COLLATE utf8_unicode_520_ci NOT NULL,
+  `name_exercise` text NOT NULL,
+  `question_exercise` text NOT NULL,
+  `request_exercise` text NOT NULL,
+  `result_exercise` text NOT NULL,
   `points_exercise` int(11) NOT NULL,
   `order_exercise` int(11) NOT NULL,
   `id_challenge` int(11) NOT NULL
@@ -57,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `exercise` (
 
 CREATE TABLE IF NOT EXISTS `promo` (
   `id_promo` int(11) NOT NULL,
-  `promo_name` text COLLATE utf8_unicode_520_ci NOT NULL
+  `promo_name` text NOT NULL
 );
 
 -- --------------------------------------------------------
@@ -79,13 +63,13 @@ CREATE TABLE IF NOT EXISTS `results` (
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `password` text COLLATE utf8_unicode_520_ci NOT NULL,
-  `email` text COLLATE utf8_unicode_520_ci NOT NULL,
+  `password` text NOT NULL,
+  `email` text NOT NULL,
   `id_user` int(11) NOT NULL,
   `is_admin` tinyint(1) NOT NULL,
   `verified_email` tinyint(1) NOT NULL,
   `id_promo` int(11) DEFAULT NULL,
-  `refresh_token` text COLLATE utf8_unicode_520_ci
+  `refresh_token` text
 );
 
 --
@@ -178,7 +162,3 @@ ALTER TABLE `results`
 --
 ALTER TABLE `user`
   ADD CONSTRAINT `id_promo` FOREIGN KEY (`id_promo`) REFERENCES `promo` (`id_promo`) ON UPDATE CASCADE;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
