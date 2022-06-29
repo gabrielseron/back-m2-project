@@ -14,9 +14,8 @@ services:
       # Nous allons préciser le dossier local
       - .:/server:cached
 
-
   dbms:
-    image: mariadb:10.7.4
+    image: mariadb
     restart: always
     ports:
       - "3309:3306"
@@ -32,7 +31,9 @@ services:
       # Pointer vers un dossier qui aura des scripts d'initialisation de notre base
       - ./dbms/dev-initdb.d:/docker-entrypoint-initdb.d
       # Ajouter le DDL qui va tourner en dernier
-      - ./dbms/ddl/challenge.sql:/docker-entrypoint-initdb.d/999-challenge.sql
+      - ./dbms/ddl/dll.sql:/docker-entrypoint-initdb.d/001-init-dev.sql
+      # - ./dbms/ddl/dll.sql:/docker-entrypoint-initdb.d/999-dll.sql
+
     networks:
       - app-network
 

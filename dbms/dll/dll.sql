@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS `challenge` (
   `id_challenge` int(11) NOT NULL,
   `id_promo` int(11) NOT NULL,
   `name_challenge` text NOT NULL,
-  primary key(userId)
 
 );
 
