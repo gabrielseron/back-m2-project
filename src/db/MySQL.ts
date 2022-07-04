@@ -41,7 +41,6 @@ export default abstract class MySQL {
                 user: process.env.DB_USER,
                 password: process.env.DB_PASS,
                 database: process.env.DB_DATABASE,
-                socketPath: process.env.SOCKETPATH, // Socket to Mac or Linux
                 port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
             })
             bdd.connect(err => {
@@ -92,7 +91,6 @@ export default abstract class MySQL {
                 user: process.env.DB_USER,
                 password: process.env.DB_PASS,
                 database: process.env.DB_DATABASE,
-                socketPath: process.env.SOCKETPATH, // Socket to Mac or Linux
                 port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
             })
             bdd.connect(err => {
@@ -150,7 +148,6 @@ export default abstract class MySQL {
                 user: process.env.DB_USER,
                 password: process.env.DB_PASS,
                 database: process.env.DB_DATABASE,
-                socketPath: process.env.SOCKETPATH, // Socket to Mac or Linux
                 port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
             })
             bdd.connect(err => {
@@ -197,6 +194,52 @@ export default abstract class MySQL {
 
         })
 
+    }
+
+    static delete(table: listeTables, where ? : any) {
+        return new Promise((resolve, reject) => {
+            //
+        })
+    }
+    static update(table: listeTables, where ? : any, val ? : any): Promise < number > {
+        return new Promise((resolve, reject) => {
+            const bdd: Connection = createConnection({ // Init params to database
+                host: process.env.DB_HOST,
+                user: process.env.DB_USER,
+                password: process.env.DB_PASS,
+                database: process.env.DB_DATABASE,
+                port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
+            })
+            bdd.connect(err => {
+                if (err) console.log('Connection database error');
+            })
+
+            let set = '';
+            let conditionWhere = '';
+            let tab = "`" + table + "`"
+            for (const [key, value] of Object.entries(val)) { // Convert the properties of our objects to an array
+                set += "`" + key + "` = '" + value + "'"
+            }
+
+            for (const [key, value] of Object.entries(where)) { // Convert the properties of our objects to an array
+                if (typeof value === 'number') {
+                    conditionWhere += "`" + key + "` = " + value
+                } else
+                {
+                    conditionWhere += "`" + key + "` = '" + value + "'"
+                }
+            }
+
+            bdd.query(`UPDATE ${tab} SET ${set} WHERE ${conditionWhere} `, (error, results, fields) => { // excute request sql
+                if (error) {
+                    reject(error); // Reponse promise false => catch
+                    console.log(error);
+                } else
+                console.log(results);
+                    resolve(results.insertId); // Reponse promise true => then or await
+                bdd.end(); // Close database
+            });
+        })
     }
 
 

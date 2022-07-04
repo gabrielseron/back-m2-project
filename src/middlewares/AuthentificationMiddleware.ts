@@ -14,14 +14,25 @@ export const authMiddleware = (req: Request, res: Response, next: () => void) =>
         else
             throw new Error(`Authorization not found`)
     } catch (error) {
-        return res.status(401).json({ error: true, message: (error as any).message }).end();
+        return res.status(403).json({ error: true, message: (error as any).message }).end();
     }
+}
+
+export const refreshMiddleware = (req: Request, res: Response, next: () => void) =>
+{
+    const refreshToken = req.body.token;
+    if (refreshToken == null) {
+        return res.status(401).json( {error: true, message: 'Tokken Error'}).end();
+    }
+
+    next();
 }
 
 export const registerMiddleware = (req: Request, res: Response, next: () => void) =>
 {
     let data: any = req.body;
-    const champsRequire = [`email`, `password`, `rePassword`]
+    const champsRequire = [`email`, `password`, `rePassword`, `id_promo`]
+    console.log(data);
 
     try
     {
@@ -52,6 +63,9 @@ export const registerMiddleware = (req: Request, res: Response, next: () => void
         if (!PasswordException.isValidPassword(data.password))
             throw new PasswordException();
 
+        if (typeof data.id_promo !== "number") {
+            throw new Error(`Promo invalide`)
+        }
         next()
 
 

@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "ts-node --watch 'src' src/index.ts -L"
+    "watch": "nodemon --watch src ./src/index.ts --exec ts-node ./src/index.ts -L"
   },
   "author": "Grp 1",
   "license": "ISC",

@@ -1,4 +1,4 @@
-export type listeTables = "user"  | "promo" | "challenge" | "exercise" | 'results'
+export type listeTables = "user" | "promo" | "challenge" | "exercise" | 'results'
 
 interface attributSelectInterface
 {
@@ -15,7 +15,7 @@ const listAttributSelect: Record < listeTables, attributSelectInterface > = { //
     "promo":
     {
         primaryKey: `id_promo`,
-        attribut: [`id_promo`, `name_promo`]
+        attribut: [`id_promo`, `promo_name`]
     },
     "challenge":
     {

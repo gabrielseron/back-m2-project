@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { Request, Response } from 'express';
-import { registerMiddleware, loginMiddleware, authMiddleware} from '../middlewares/AuthentificationMiddleware';
+import { registerMiddleware, loginMiddleware, authMiddleware, refreshMiddleware} from '../middlewares/AuthentificationMiddleware';
 import { AuthentificationController } from '../controllers/AuthentificationController';
 const route: Router = Router();
 

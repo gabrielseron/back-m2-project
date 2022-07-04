@@ -1,4 +1,5 @@
 import MySQL from '../db/MySQL';
+import listAttributSelect, { listeTables } from '../utils/listAttributSelect';
 
 export default class User
 {
@@ -13,7 +14,7 @@ export default class User
     protected table: string = 'user';
 
     /**
-     * Creates an instance of Personne.
+     * Creates an instance of User.
      * @param {(User(instance) | null)} id
      * @param {string} [email='']
      * @param {string} [password='']
@@ -96,39 +97,157 @@ export default class User
      *
      * Save to the property in database
      * @returns {Promise < number >}
-     * @memberof Personne
+     * @memberof User
      */
-    // save(): Promise < number > {
-    //     return new Promise((resolve, reject) => {
-    //         MySQL.insert(this.table, this).then((id: number) => {
-    //             this.idpersonne = id;
-    //             console.log(`Save ${this.table}`);
-    //             resolve(id)
-    //         }).catch((err) => {
-    //             console.log(err);
-    //             reject(false)
-    //         })
-    //     })
-    // };
+    save(): Promise < number > {
+        return new Promise((resolve, reject) => {
+            MySQL.insert(this.table, this).then((id: number) => {
+                this.id_user = id;
+                console.log(`Save ${this.table}`);
+                resolve(id)
+            }).catch((err) => {
+                console.log(err);
+                reject(false)
+            })
+        })
+    };
+
+    setToken(user: User, token: any): Promise < number > {
+        return new Promise((resolve, reject) => {
+            MySQL.update('user', user, token).then((id: number) => {
+                this.id_user = id;
+                console.log(`Save ${this.table}`);
+                resolve(id)
+            }).catch((err) => {
+                console.log(err);
+                reject(false)
+            })
+        })
+    }
 
     /************************* STATIC METHOD *************************/
 
-    // static select(where: any) {
-    //     return new Promise((resolve, reject) => {
-    //         MySQL.select('personne', where).then((arrayPersonne: Array < any > ) => {
-    //                 let data: Array < Personne > = [];
-    //                 for (const personne of arrayPersonne) {
-    //                     personne.dateNaiss = new String(personne.dateNaiss)
-    //                     personne.id = personne.idpersonne;
-    //                     data.push(new Personne(personne));
-    //                 }
-    //                 console.log(data);
-    //                 resolve(data)
-    //             })
-    //             .catch((err: any) => {
+    static select(where: any) {
+        return new Promise((resolve, reject) => {
+            MySQL.select('user', where).then((arrayUser: Array < any > ) => {
+                    let data: Array < User > = [];
+                    console.log(data);
+                    for (const user of arrayUser) {
+                        user.id = user.id_user;
+                        data.push(new User(user, user.email, user.password, user?.verfied_mail, user.id_promo, user?.id_admin, user?.refresh_token));
+                    }
+                    resolve(data)
+                })
+                .catch((err: any) => {
+                    console.log(err);
+                    reject(false)
+                });
+        })
+    }
+
+    static selectJoin(type: 'LEFT' | 'RIGHT' | 'FULL' | 'INNER', table: listeTables, fk: any, where: any) {
+        return new Promise((resolve, reject) => {
+            MySQL.selectJoin('user',[
+                {
+                    type: type,
+                    where: {table: 'user', foreignKey: fk},
+                    table: table
+                }], where).then((arrayUser: Array < any > ) => {
+                    let data: Array < User > = [];
+                    console.log(data);
+                    for (const user of arrayUser) {
+                        user.id = user.id_user;
+                        data.push(new User(user, user.email, user.password, user?.verfied_mail, user.id_promo, user?.id_admin, user?.refresh_token));
+                    }
+                    resolve(data)
+                })
+                .catch((err: any) => {
+                    console.log(err);
+                    reject(false)
+                });
+        })
+    }
+
+    static delete(mail: string)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            MySQL.delete('user', { email: mail }).then(() =>
+            {
+                resolve(true)
+            }).catch((err: any) =>
+            {
+                console.log(err);
+                reject(false)
+            });
+        })
+    }
+
+    static isExiste(mail: string)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            MySQL.select('user', { email: mail }).then((arrayUser: Array < any > ) =>
+            {
+                resolve((arrayUser.length > 0))
+            }).catch((err: any) =>
+            {
+                console.log(err);
+                reject(false)
+            });
+        })
+    }
+
+    // static forget(where: any)
+    // {
+    //     return new Promise((resolve, reject) =>
+    //     {
+    //         MySQL.select('user', where).then((arrayUser: Array < any > ) =>
+    //         {
+    //             let data: Array < User > = [];
+    //             for (const user of arrayUser)
+    //             {
+    //                 user.id = user.iduser;
+    //                 data.push(new User(user, user.nameUser, user.mailUser, user.passUser));
+    //             }
+    //             resolve(data)
+    //         }).catch((err: any) =>
+    //         {
+    //             console.log(err);
+    //             reject(false)
+    //         });
+    //     })
+    // }
+
+    // static resetPass(email: string, token: any)
+    // {
+    //     return new Promise((resolve, reject) =>
+    //     {
+    //         let mailTransporter = createTransport(
+    //         {
+    //             service: 'gmail',
+    //             auth: {
+    //                 user: process.env.NODEMAILEREMAIL,
+    //                 pass: process.env.NODEMAILERPASS
+    //             }
+    //         });
+    //         let mailDetails =
+    //         {
+    //             from: process.env.NODEMAILEREMAIL,
+    //             to: email,
+    //             subject: 'Reset Password',
+    //             text: `Reset Password : http://localhost:8081/auth/resetPass/${token}`
+    //         };
+            
+    //         mailTransporter.sendMail(mailDetails, function(err, data)
+    //         {
+    //             if(err) {
     //                 console.log(err);
     //                 reject(false)
-    //             });
+    //             } else {
+    //                 resolve(true)
+    //             }
+    //         });
     //     })
     // }
 }
