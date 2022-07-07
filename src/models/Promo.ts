@@ -58,45 +58,64 @@ get attributInsert(): Array < string > {
  * @returns {Promise < number >}
  * @memberof Promo
  */
-// save(): Promise < number > {
-//     return new Promise((resolve, reject) => {
-//         MySQL.insert(this.table, this).then((id: number) => {
-//             this.idpersonne = id;
-//             console.log(`Save ${this.table}`);
-//             resolve(id)
-//         }).catch((err) => {
-//             console.log(err);
-//             reject(false)
-//         })
-//     })
-// };
+save(): Promise < number > {
+    return new Promise((resolve, reject) => {
+        MySQL.insert(this.table, this).then((id: number) => {
+            this.id_promo = id;
+            console.log(`Save ${this.table}`);
+            resolve(id)
+        }).catch((err) => {
+            console.log(err);
+            reject(false)
+        })
+    })
+};
 
 /************************* STATIC METHOD *************************/
 
-    static select(where: any) {
+    static select(where?: any) {
         return new Promise((resolve, reject) => {
             MySQL.select('promo', where).then((arrayPromo: Array < any > ) => {
-                    let data: Array < Promo > = [];
-                    for (const promo of arrayPromo) {
-                        promo.id = promo.id_promo;
-                        data.push(new Promo(promo, promo.promo_name));
-                    }
-                    console.log(data);
-                    resolve(data)
-                })
-                .catch((err: any) => {
-                    console.log(err);
-                    reject(false)
-                });
+                let data: Array < Promo > = [];
+                for (const promo of arrayPromo) {
+                    promo.id = promo.id_promo;
+                    data.push(new Promo(promo, promo.promo_name));
+                }
+                console.log(data);
+                resolve(data)
+            })
+            .catch((err: any) => {
+                console.log(err);
+                reject(false)
+            });
         })
     }
 
+    static selectAll() {
+        return new Promise((resolve, reject) => {
+            MySQL.getAll('promo').then((arrayPromo: Array < any > ) => {
+                let data: Array < any > = [];
+                for (const promo of arrayPromo) {
+                    promo.id = promo.id_promo;
+                    promo.name = promo.promo_name
+                    data.push({id: promo.id, name: promo.name});
+                }
+                resolve(data)
+            })
+            .catch((err: any) => {
+                console.log(err);
+                reject(false)
+            });
+        })
+    }
 
-    static isExiste(id: number)
+    static isExiste(key: string, value: string)
     {
         return new Promise((resolve, reject) =>
         {
-            MySQL.select('promo', { id_promo: id }).then((arrayPromo: Array < any > ) =>
+            let param: any = {};
+            param[key] = value;
+            MySQL.select('promo', param).then((arrayPromo: Array < any > ) =>
             {
                 resolve((arrayPromo.length > 0))
             }).catch((err: any) =>

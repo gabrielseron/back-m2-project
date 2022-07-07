@@ -28,14 +28,14 @@ export class AuthentificationController
             if (!isOk) 
                 throw new Error(`Wrong password`)
 
-            if (await Promo.isExiste(user.id_promo))
+            if (await Promo.isExiste('id_promo', user.id_promo))
                 promo = await Promo.select({ id_promo : user.id_promo});
             else
                 throw new Error(`An error has occured with the promotion`)
 
             promo = promo[0];
 
-            const accessToken: any = sign({user}, < string > process.env.JWT_KEY, { expiresIn: '60s' })
+            const accessToken: any = sign({user}, < string > process.env.JWT_KEY, { expiresIn: '24h' })
 
             const refreshToken: any = sign({user}, < string > process.env.JWT_REFRESH_KEY)
 
@@ -62,7 +62,8 @@ export class AuthentificationController
         if (await User.isExiste(data.email))
             throw new Error(`Email already used!`)
 
-        if (await Promo.isExiste(data.id_promo)) {
+        console.log(data);
+        if (await Promo.isExiste('id_promo', data.id_promo)) {
             const password = await PasswordException.hashPassword(data.password);
             const token = '';
             const user = new User(null, data.email, password, false, data.id_promo, false, token);

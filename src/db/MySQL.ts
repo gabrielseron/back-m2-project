@@ -201,6 +201,46 @@ export default abstract class MySQL {
             //
         })
     }
+
+    static getAll(table: listeTables): any {
+        return new Promise((resolve, reject) => { // return Promise because the processing time of the database | The only way to get an answer is the "resolve()" or "reject()"
+            const bdd: Connection = createConnection({ // Init params to database
+                host: process.env.DB_HOST,
+                user: process.env.DB_USER,
+                password: process.env.DB_PASS,
+                database: process.env.DB_DATABASE,
+                port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
+            })
+            bdd.connect(err => {
+                if (err) console.log('Connection database error');
+            })
+
+            let data = []; // Stock value
+            let columns = "";
+
+            let parameters = "";
+
+            const key = listAttributSelect[table].attribut // select is method to the Class => Array<string>
+
+            for (const champs of key) {
+                columns += "`" + champs + "`,";
+            }
+
+            columns = columns.slice(0, -1); // delete the last carac.
+
+            const query = bdd.query(`SELECT ${columns} FROM ${table};`, (error, results, fields) => { // excute request sql
+                if (error) {
+                    reject(error); // Reponse promise false => catch
+                    console.log(error);
+                } else
+                    resolve(results); // Reponse promise true => then or await
+                bdd.end(); // Close database
+            });
+
+        })
+
+    }
+
     static update(table: listeTables, where ? : any, val ? : any): Promise < number > {
         return new Promise((resolve, reject) => {
             const bdd: Connection = createConnection({ // Init params to database

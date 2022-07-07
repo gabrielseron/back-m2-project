@@ -1,10 +1,46 @@
-import { verify } from 'jsonwebtoken';
+import { verify, decode } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
 import EmailException from '../exceptions/EmailException';
 import PasswordException from '../exceptions/PasswordException';
 
 const split = (token: string) => { return token.split('Bearer ').join('') }
+
+export const authAdminMiddleware = async (req: Request, res: Response, next: () => void) =>
+{
+    try {
+        if (req.headers.authorization && verify(split(req.headers.authorization), < string > process.env.JWT_KEY)) {
+            const isAdmin = await ( < any > decode(req.headers.authorization)).user.is_admin;
+            if (await (isAdmin)) {
+                next();
+            } else {
+                return res.status(403).json({isAdmin: false, message: 'You\'re not allowed to access this'}).end();
+            }
+        }
+        else
+            throw new Error(`Authorization not found`)
+    } catch (error) {
+        return res.status(403).json({ error: true, message: (error as any).message }).end();
+    }
+}
+
+export const authAdminMiddlewareFinish = async (req: Request, res: Response) =>
+{
+    try {
+        if (req.headers.authorization && verify(split(req.headers.authorization), < string > process.env.JWT_KEY)) {
+            const isAdmin = await ( < any > decode(req.headers.authorization)).user.is_admin;
+            if (await (isAdmin)) {
+                return res.status(201).json({isAdmin: true, isLogged: true, message: 'Success'}).end();
+            } else {
+                return res.status(403).json({isAdmin: false, message: 'You\'re not allowed to access this'}).end();
+            }
+        }
+        else
+            throw new Error(`Authorization not found`)
+    } catch (error) {
+        return res.status(403).json({ error: true, message: (error as any).message }).end();
+    }
+}
 
 export const authMiddleware = (req: Request, res: Response, next: () => void) =>
 {
@@ -32,7 +68,6 @@ export const registerMiddleware = (req: Request, res: Response, next: () => void
 {
     let data: any = req.body;
     const champsRequire = [`email`, `password`, `rePassword`, `id_promo`]
-    console.log(data);
 
     try
     {
