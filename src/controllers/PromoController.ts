@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Promo from '../models/Promo';
-
+import User from '../models/User';
 export class PromoController
 {
 
@@ -32,4 +32,20 @@ export class PromoController
             return res.status(401).json({ error: true, message: `An error has occured : ${error}` }).end();
         }
     }
+
+    static getUsers = async(req: Request, res: Response) =>
+    {
+        let id: any = parseInt(req.params.id, 10);
+        let users: any;
+        try {
+            if (!await Promo.isExiste('id_promo', id))
+                throw new Error(`Promo don't exist`)
+
+            users = await User.selectAll(id, {id_promo: id});
+            return res.status(201).json({users});
+        } catch (error) {
+            return res.status(401).json({ error: true, message: `An error has occured : ${error}` }).end();
+        }
+    }
+    
 }
