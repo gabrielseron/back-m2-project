@@ -14,13 +14,13 @@ export const authAdminMiddleware = async (req: Request, res: Response, next: () 
             if (await (isAdmin)) {
                 next();
             } else {
-                return res.status(403).json({isAdmin: false, message: 'You\'re not allowed to access this'}).end();
+                return res.status(401).json({isAdmin: false, message: 'You\'re not allowed to access this'}).end();
             }
         }
         else
             throw new Error(`Authorization not found`)
     } catch (error) {
-        return res.status(403).json({ error: true, message: (error as any).message }).end();
+        return res.status(401).json({ error: true, message: (error as any).message }).end();
     }
 }
 
@@ -32,13 +32,13 @@ export const authAdminMiddlewareFinish = async (req: Request, res: Response) =>
             if (await (isAdmin)) {
                 return res.status(201).json({isAdmin: true, isLogged: true, message: 'Success'}).end();
             } else {
-                return res.status(403).json({isAdmin: false, message: 'You\'re not allowed to access this'}).end();
+                return res.status(401).json({isAdmin: false, message: 'You\'re not allowed to access this'}).end();
             }
         }
         else
             throw new Error(`Authorization not found`)
     } catch (error) {
-        return res.status(403).json({ error: true, message: (error as any).message }).end();
+        return res.status(401).json({ error: true, message: (error as any).message }).end();
     }
 }
 
@@ -50,7 +50,7 @@ export const authMiddleware = (req: Request, res: Response, next: () => void) =>
         else
             throw new Error(`Authorization not found`)
     } catch (error) {
-        return res.status(403).json({ error: true, message: (error as any).message }).end();
+        return res.status(401).json({ error: true, message: (error as any).message }).end();
     }
 }
 
@@ -150,3 +150,102 @@ export const loginMiddleware = (req: Request, res: Response, next: () => void) =
         return res.status(400).json({ error: true, message: (error as any).message }).end();
     }
 }
+
+export const verifEmailMiddleware = (req: Request, res: Response, next: () => void) =>
+{
+    try {
+        if (req.params.token && verify(split(req.params.token), < string > process.env.JWT_KEY))
+            next()
+        else
+            throw new Error(`Invalid Token`)
+    } catch (error) {
+        return res.status(401).json({ error: true, message: (error as any).message }).end();
+    }
+}
+
+
+export const resetPasswordMiddleware = (req: Request, res: Response, next: () => void) =>
+{
+    let data: any = req.body;
+    const champsRequire = [`email`]
+
+    try
+    {
+        let error: boolean = true;
+        let textError: string = '';
+        for (const require in champsRequire)
+        {
+            error = true;
+            for (const champs in data)
+            {
+                if (champs === champsRequire[require])
+                    error = false;
+            }
+            if (error)
+                textError += `${champsRequire[require]}, `
+        }
+        if (textError.length > 0)
+        {
+            textError = textError.slice(0, -2);
+            throw new Error(`Les champs ${textError} sont manquant!`)
+        }
+
+        if (EmailException.checkEmail(data.email))
+            throw new EmailException();
+        next()
+
+    } catch (error)
+    {
+        return res.status(400).json( {error: true, message: (error as any).message}).end();
+    }
+}
+
+export const changePasswordMiddleware = async (req: Request, res: Response, next: () => void) =>
+{
+    let data: any = req.body;
+    const champsRequire = [`token`, `password`, `rePassword`]
+
+    try
+    {
+        let error: boolean = true;
+        let textError: string = '';
+        for (const require in champsRequire)
+        {
+            error = true;
+            for (const champs in data)
+            {
+                if (champs === champsRequire[require])
+                    error = false;
+            }
+            if (error)
+                textError += `${champsRequire[require]}, `
+        }
+        if (textError.length > 0)
+        {
+            textError = textError.slice(0, -2);
+            throw new Error(`Les champs ${textError} sont manquant!`)
+        }
+
+        if (!verify(split(data.token), < string > process.env.JWT_KEY))
+            throw new Error(`Invalid Token`)
+
+        console.log('a');
+
+        if (await ( < any > decode(data.token)).reason !== 'resetPassword')
+            throw new Error(`Invalid Token`)
+
+        if (data.password !== data.rePassword)
+            throw new Error(`Les mots de passe ne correspondent pas`)
+
+        if (!PasswordException.isValidPassword(data.password))
+            throw new PasswordException();
+
+        next()
+
+    } catch (error)
+    {
+        return res.status(400).json( {error: true, message: (error as any).message}).end();
+    }
+}
+
+

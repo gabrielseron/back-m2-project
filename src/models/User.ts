@@ -125,6 +125,32 @@ export default class User
         })
     }
 
+    verifEmail(): Promise < number > {
+        return new Promise((resolve, reject) => {
+            MySQL.update('user', {id_user: this.id}, {verified_email: 1}).then((id: number) => {
+                this.id_user = id;
+                console.log(`Save ${this.table}`);
+                resolve(id)
+            }).catch((err) => {
+                console.log(err);
+                reject(false)
+            })
+        })
+    }
+
+    changePassword(password: string): Promise < number > {
+        return new Promise((resolve, reject) => {
+            MySQL.update('user', {email: this.email}, {password}).then((id: number) => {
+                this.id_user = id;
+                console.log(`Save ${this.table}`);
+                resolve(id)
+            }).catch((err) => {
+                console.log(err);
+                reject(false)
+            })
+        })
+    }
+
     /************************* STATIC METHOD *************************/
 
     static select(where: any) {
@@ -197,57 +223,4 @@ export default class User
             });
         })
     }
-
-    // static forget(where: any)
-    // {
-    //     return new Promise((resolve, reject) =>
-    //     {
-    //         MySQL.select('user', where).then((arrayUser: Array < any > ) =>
-    //         {
-    //             let data: Array < User > = [];
-    //             for (const user of arrayUser)
-    //             {
-    //                 user.id = user.iduser;
-    //                 data.push(new User(user, user.nameUser, user.mailUser, user.passUser));
-    //             }
-    //             resolve(data)
-    //         }).catch((err: any) =>
-    //         {
-    //             console.log(err);
-    //             reject(false)
-    //         });
-    //     })
-    // }
-
-    // static resetPass(email: string, token: any)
-    // {
-    //     return new Promise((resolve, reject) =>
-    //     {
-    //         let mailTransporter = createTransport(
-    //         {
-    //             service: 'gmail',
-    //             auth: {
-    //                 user: process.env.NODEMAILEREMAIL,
-    //                 pass: process.env.NODEMAILERPASS
-    //             }
-    //         });
-    //         let mailDetails =
-    //         {
-    //             from: process.env.NODEMAILEREMAIL,
-    //             to: email,
-    //             subject: 'Reset Password',
-    //             text: `Reset Password : http://localhost:8081/auth/resetPass/${token}`
-    //         };
-            
-    //         mailTransporter.sendMail(mailDetails, function(err, data)
-    //         {
-    //             if(err) {
-    //                 console.log(err);
-    //                 reject(false)
-    //             } else {
-    //                 resolve(true)
-    //             }
-    //         });
-    //     })
-    // }
 }
