@@ -156,41 +156,36 @@ export default class User
     static select(where: any) {
         return new Promise((resolve, reject) => {
             MySQL.select('user', where).then((arrayUser: Array < any > ) => {
-                    let data: Array < User > = [];
-                    console.log(data);
-                    for (const user of arrayUser) {
-                        user.id = user.id_user;
-                        data.push(new User(user, user.email, user.password, user?.verfied_mail, user.id_promo, user?.id_admin, user?.refresh_token));
-                    }
-                    resolve(data)
-                })
-                .catch((err: any) => {
-                    console.log(err);
-                    reject(false)
-                });
+                let data: Array < User > = [];
+                console.log(data);
+                for (const user of arrayUser) {
+                    user.id = user.id_user;
+                    data.push(new User(user, user.email, user.password, user?.verified_email, user.id_promo, user?.id_admin, user?.refresh_token));
+                }
+                resolve(data)
+            })
+            .catch((err: any) => {
+                console.log(err);
+                reject(false)
+            });
         })
     }
 
-    static selectJoin(type: 'LEFT' | 'RIGHT' | 'FULL' | 'INNER', table: listeTables, fk: any, where: any) {
+    static leftJoin(table: listeTables, fk: any, where: any) {
         return new Promise((resolve, reject) => {
-            MySQL.selectJoin('user',[
-                {
-                    type: type,
-                    where: {table: 'user', foreignKey: fk},
-                    table: table
-                }], where).then((arrayUser: Array < any > ) => {
-                    let data: Array < User > = [];
-                    console.log(data);
-                    for (const user of arrayUser) {
-                        user.id = user.id_user;
-                        data.push(new User(user, user.email, user.password, user?.verfied_mail, user.id_promo, user?.id_admin, user?.refresh_token));
-                    }
-                    resolve(data)
-                })
-                .catch((err: any) => {
-                    console.log(err);
-                    reject(false)
-                });
+            MySQL.leftJoin('user', table, fk, where).then((arrayUser: any) => {
+                let data: any = [];
+                console.log(data);
+                for (const user of arrayUser) {
+                    user.id = user.id_user;
+                    data.push(user);
+                }
+                resolve(data)
+            })
+            .catch((err: any) => {
+                console.log(err);
+                reject(false)
+            });
         })
     }
 
@@ -218,6 +213,29 @@ export default class User
                 resolve((arrayUser.length > 0))
             }).catch((err: any) =>
             {
+                console.log(err);
+                reject(false)
+            });
+        })
+    }
+
+    static selectAll(id: number, where: any) {
+        return new Promise((resolve, reject) => {
+            MySQL.select('user', where).then((arrayUser: Array < any > ) => {
+                let data: Array < any > = [];
+                console.log(data);
+                for (const user of arrayUser) {
+                    user.id = user.id_user;
+                    data.push({
+                        id_user: user.id_user,
+                        email: user.email,
+                        verified_email: user.verified_email ? true : false,
+                        id_promo: user.id_promo
+                    })
+                }
+                resolve(data)
+            })
+            .catch((err: any) => {
                 console.log(err);
                 reject(false)
             });

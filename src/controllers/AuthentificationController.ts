@@ -11,11 +11,10 @@ export class AuthentificationController
     {
         let data: any = req.body;
         let user: any
-        let promo: any
-
         try {
+
             if (await User.isExiste(data.email))
-                user = await User.select({ email : data.email});
+                user = await User.leftJoin('promo', {'user.id_promo': 'promo.id_promo'}, { email : data.email });
             else
                 throw new Error(`User don't exist!`)
 
@@ -23,38 +22,31 @@ export class AuthentificationController
                 throw new Error(`Email don't exist!`)
 
             user = user[0];
+            console.log(user);
 
             const isOk = await PasswordException.comparePassword(data.password, user.password);
 
             if (!isOk) 
                 throw new Error(`Wrong password`)
-
-            if (!user.isVerified) {
+            if (!user.verified_email) {
                 throw new Error(`Email is not verified`)
             }
-
-            if (await Promo.isExiste('id_promo', user.id_promo))
-                promo = await Promo.select({ id_promo : user.id_promo});
-            else
-                throw new Error(`An error has occured with the promotion`)
-
-            promo = promo[0];
 
             const accessToken: any = sign({user}, < string > process.env.JWT_KEY, { expiresIn: '24h' })
 
             const refreshToken: any = sign({user}, < string > process.env.JWT_REFRESH_KEY)
 
-            // user.setToken({id_user: user.id}, {refresh_token: refreshToken})
-
             const response = {
-                email: user.emailUser,
-                promo: promo.getname,
+                email: user.email,
+                promoId: user.id_promo,
+                promoName: user.promo_name,
                 token: accessToken,
                 refreshToken: refreshToken,
                 expired: await ( < any > decode(accessToken)).exp
             }
 
             return res.status(201).json(response);
+
         } catch (err) {
             return res.status(401).json({ error: true, message: (err as any).message }).end();
         }

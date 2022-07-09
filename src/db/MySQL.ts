@@ -196,6 +196,43 @@ export default abstract class MySQL {
 
     }
 
+    static leftJoin(table: listeTables, outerTable: listeTables, fk: any, where: any) {
+        return new Promise((resolve, reject) => {
+            const bdd: Connection = createConnection({ // Init params to database
+                host: process.env.DB_HOST,
+                user: process.env.DB_USER,
+                password: process.env.DB_PASS,
+                database: process.env.DB_DATABASE,
+                port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
+            })
+
+            bdd.connect(err => {
+                if (err) console.log('Connection database error');
+            })
+
+            let fkString = '';
+            let conditionWhere = '';
+
+            Object.keys(fk).forEach(element => {
+                fkString += element + " = " + fk[element];
+            });
+
+            Object.keys(where).forEach(element => {
+                conditionWhere += element + " = '" + where[element] + "'";
+            });
+
+
+            const query = bdd.query(`SELECT * FROM ${table} LEFT JOIN ${outerTable} ON ${fkString} WHERE ${conditionWhere}`, (error, results, fields) => {
+                if (error) {
+                    reject(error); // Reponse promise false => catch
+                    console.log(error);
+                } else
+                    resolve(results); // Reponse promise true => then or await
+                bdd.end(); // Close database
+            })
+        })
+    }
+
     static delete(table: listeTables, where ? : any) {
         return new Promise((resolve, reject) => {
             //
