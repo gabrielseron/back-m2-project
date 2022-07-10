@@ -27,7 +27,7 @@ export const PostPromoMiddleware = async (req: Request, res: Response, next: () 
             throw new Error(`Les champs ${textError} sont manquant!`)
         }
 
-        if (typeof data.namePromo !== "string") {
+        if (typeof data.promo_name !== "string") {
             throw new Error(`Promo invalide`)
         }
         next()

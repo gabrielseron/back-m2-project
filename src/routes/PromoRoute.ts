@@ -4,7 +4,7 @@ import { authMiddleware, authAdminMiddleware } from '../middlewares/Authentifica
 import { GetPromoUsersMiddleware, PostPromoMiddleware } from '../middlewares/PromoMiddleware';
 const route: Router = Router();
 
-route.get('/', authMiddleware, PromoController.getAll);
+route.get('/', PromoController.getAll);
 route.get('/:id', authAdminMiddleware, GetPromoUsersMiddleware, PromoController.getUsers);
 route.post('/', authAdminMiddleware, PostPromoMiddleware, PromoController.create);
 
