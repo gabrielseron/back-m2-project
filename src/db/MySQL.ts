@@ -44,7 +44,7 @@ export default abstract class MySQL {
                 port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
             })
             bdd.connect(err => {
-                if (err) console.log('Connection database error');
+                if (err) console.log('Erreur lors de la connexion à la base de données');
             })
 
             let data = []; // Stock value
@@ -94,7 +94,7 @@ export default abstract class MySQL {
                 port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
             })
             bdd.connect(err => {
-                if (err) console.log('Connection database error');
+                if (err) console.log('Erreur lors de la connexion à la base de données');
             })
 
             let data = []; // Stock value
@@ -151,7 +151,7 @@ export default abstract class MySQL {
                 port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
             })
             bdd.connect(err => {
-                if (err) console.log('Connection database error');
+                if (err) console.log('Erreur lors de la connexion à la base de données');
             })
 
             let data = []; // Stock value
@@ -207,7 +207,7 @@ export default abstract class MySQL {
             })
 
             bdd.connect(err => {
-                if (err) console.log('Connection database error');
+                if (err) console.log('Erreur lors de la connexion à la base de données');
             })
 
             let fkString = '';
@@ -249,7 +249,7 @@ export default abstract class MySQL {
                 port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
             })
             bdd.connect(err => {
-                if (err) console.log('Connection database error');
+                if (err) console.log('Erreur lors de la connexion à la base de données');
             })
 
             let data = []; // Stock value
@@ -288,7 +288,7 @@ export default abstract class MySQL {
                 port: parseInt((process.env.PORTMYSQL === undefined) ? '3306' : process.env.PORTMYSQL) // 3306 port default to mysql
             })
             bdd.connect(err => {
-                if (err) console.log('Connection database error');
+                if (err) console.log('Erreur lors de la connexion à la base de données');
             })
 
             let set = '';

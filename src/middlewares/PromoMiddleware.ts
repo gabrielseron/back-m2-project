@@ -41,7 +41,7 @@ export const PostPromoMiddleware = async (req: Request, res: Response, next: () 
 export const GetPromoUsersMiddleware = async (req: Request, res: Response, next: () => void) => {
     try {
         if (!req.params.id || isNaN(req.params.id as any))
-            throw new Error(`Invalid Id`)
+            throw new Error(`Id invalide`)
 
         next()
 

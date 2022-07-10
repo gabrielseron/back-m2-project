@@ -12,7 +12,7 @@ export class PromoController
             promo = await Promo.selectAll();
             return res.status(201).json(promo);
         } catch (error) {
-            return res.status(401).json({ error: true, message: `An error has occured : ${error}` }).end();
+            return res.status(401).json({ error: true, message: `Une erreur est survenue : ${error}` }).end();
         }
     }
 
@@ -22,14 +22,14 @@ export class PromoController
 
         try {
             if (await Promo.isExiste('promo_name', data.promo_name))
-                throw new Error(`Promo already exist`)
+                throw new Error(`Cette promo existe déjà !`)
 
             const promo = new Promo(null, data.promo_name)
             await promo.save();
 
-            return res.status(201).json({message: 'Success'});
+            return res.status(201).json({message: 'Opération réussie avec succès'});
         } catch (error) {
-            return res.status(401).json({ error: true, message: `An error has occured : ${error}` }).end();
+            return res.status(401).json({ error: true, message: `Une erreur est survenue : ${error}` }).end();
         }
     }
 
@@ -39,12 +39,12 @@ export class PromoController
         let users: any;
         try {
             if (!await Promo.isExiste('id_promo', id))
-                throw new Error(`Promo don't exist`)
+                throw new Error(`Cette promo n'existe pas`)
 
             users = await User.selectAll(id, {id_promo: id});
             return res.status(201).json({users});
         } catch (error) {
-            return res.status(401).json({ error: true, message: `An error has occured : ${error}` }).end();
+            return res.status(401).json({ error: true, message: `Une erreur est survenue : ${error}` }).end();
         }
     }
     

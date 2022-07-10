@@ -14,11 +14,11 @@ export const authAdminMiddleware = async (req: Request, res: Response, next: () 
             if (await (isAdmin)) {
                 next();
             } else {
-                return res.status(401).json({isAdmin: false, message: 'You\'re not allowed to access this'}).end();
+                return res.status(401).json({isAdmin: false, message: 'Vous n\'êtes pas autorisé à accèder à cette ressource'}).end();
             }
         }
         else
-            throw new Error(`Authorization not found`)
+            throw new Error(`Autorisation introuvable`)
     } catch (error) {
         return res.status(401).json({ error: true, message: (error as any).message }).end();
     }
@@ -32,11 +32,11 @@ export const authAdminMiddlewareFinish = async (req: Request, res: Response) =>
             if (await (isAdmin)) {
                 return res.status(201).json({isAdmin: true, isLogged: true, message: 'Success'}).end();
             } else {
-                return res.status(401).json({isAdmin: false, message: 'You\'re not allowed to access this'}).end();
+                return res.status(401).json({isAdmin: false, message: 'Vous n\'êtes pas autorisé à accèder à cette ressource'}).end();
             }
         }
         else
-            throw new Error(`Authorization not found`)
+            throw new Error(`Autorisation introuvable`)
     } catch (error) {
         return res.status(401).json({ error: true, message: (error as any).message }).end();
     }
@@ -48,7 +48,7 @@ export const authMiddleware = (req: Request, res: Response, next: () => void) =>
         if (req.headers.authorization && verify(split(req.headers.authorization), < string > process.env.JWT_KEY))
             return next()
         else
-            throw new Error(`Authorization not found`)
+            throw new Error(`Autorisation introuvable`)
     } catch (error) {
         return res.status(401).json({ error: true, message: (error as any).message }).end();
     }
@@ -87,7 +87,7 @@ export const registerMiddleware = (req: Request, res: Response, next: () => void
         if (textError.length > 0)
         {
             textError = textError.slice(0, -2);
-            throw new Error(`Les champs ${textError} sont manquant!`)
+            throw new Error(`Les champs ${textError} sont manquant !`)
         }
 
         if (data.password !== data.rePassword)
@@ -134,7 +134,7 @@ export const loginMiddleware = (req: Request, res: Response, next: () => void) =
         if (textError.length > 0)
         {
             textError = textError.slice(0, -2); // Delete ', '
-            throw new Error(`${textError} is missing`)
+            throw new Error(`${textError} est manquant`)
         }
 
         if (EmailException.checkEmail(data.email)) // Check valid syntaxe email
@@ -157,7 +157,7 @@ export const verifEmailMiddleware = (req: Request, res: Response, next: () => vo
         if (req.params.token && verify(split(req.params.token), < string > process.env.JWT_KEY))
             next()
         else
-            throw new Error(`Invalid Token`)
+            throw new Error(`Token invalide`)
     } catch (error) {
         return res.status(401).json({ error: true, message: (error as any).message }).end();
     }
@@ -227,12 +227,12 @@ export const changePasswordMiddleware = async (req: Request, res: Response, next
         }
 
         if (!verify(split(data.token), < string > process.env.JWT_KEY))
-            throw new Error(`Invalid Token`)
+            throw new Error(`Token invalide`)
 
         console.log('a');
 
         if (await ( < any > decode(data.token)).reason !== 'resetPassword')
-            throw new Error(`Invalid Token`)
+            throw new Error(`Token invalide`)
 
         if (data.password !== data.rePassword)
             throw new Error(`Les mots de passe ne correspondent pas`)

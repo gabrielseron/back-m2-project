@@ -18,8 +18,8 @@ export default abstract class NodeMailerApi
             {
                 from: process.env.NODEMAILEREMAIL,
                 to: email,
-                subject: 'Validate Email',
-                text: `<h3>Click on the link to verify your email</h3><br /><a href=${process.env.FRONT_URL}/auth/verifEmail/${token}>${process.env.FRONT_URL}/auth/verifEmail/${token}</a>`
+                subject: "Vérification de l'adresse E-mail",
+                text: `<h3>Cliquez sur le lien pour vérifier votre adresse E-mail</h3><br /><a href=${process.env.FRONT_URL}/auth/verifEmail/${token}>${process.env.FRONT_URL}/auth/verifEmail/${token}</a>`
             };
             
             mailTransporter.sendMail(mailDetails, function(err, data)
@@ -51,8 +51,8 @@ export default abstract class NodeMailerApi
             {
                 from: process.env.NODEMAILEREMAIL,
                 to: email,
-                subject: 'Reset Password',
-                text: `<h3>Click on the link to reset your password, the link will expire in 5 minutes</h3><br /><a href=${process.env.FRONT_URL}/auth/resetPassword/${token}>${process.env.FRONT_URL}/auth/resetPassword/${token}</a>`
+                subject: 'Réinitialisation de votre mot de passe',
+                text: `<h3>Cliquez sur le lien pour réinitialiser votre mot de passe, attention ce lien expirera dans 5 minutes</h3><br /><a href=${process.env.FRONT_URL}/auth/resetPassword/${token}>${process.env.FRONT_URL}/auth/resetPassword/${token}</a>`
             };
 
             mailTransporter.sendMail(mailDetails, function(err, data)

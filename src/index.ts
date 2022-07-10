@@ -30,6 +30,6 @@ app.use('/user', UserRoute);
 app.use('/promo', PromoRoute);
 
 app.listen(port, () => {
-  console.log(`Server started on http://localhost:${port}`);
-  console.log(`Main route is http://localhost:${port}/auth`);
+  console.log(`Serveur démarré sur http://localhost:${port}`);
+  console.log(`Route principale définie sur http://localhost:${port}/auth`);
 })

@@ -2,7 +2,7 @@ export default class EmailException extends Error
 {
     constructor()
     {
-        super('Email is not valid')
+        super("L'adresse E-mail n'est pas valide")
     }
 
     static checkEmail(email: string): boolean

@@ -7,7 +7,7 @@ export default class PasswordException extends Error
 
     constructor()
     {
-        super('Invalid Password')
+        super('Mot de passe erroné')
     }
 
     public static isValidPassword(password: string): boolean
