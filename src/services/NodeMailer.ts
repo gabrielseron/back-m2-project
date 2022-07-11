@@ -19,7 +19,7 @@ export default abstract class NodeMailerApi
                 from: process.env.NODEMAILEREMAIL,
                 to: email,
                 subject: 'Validate Email',
-                text: `<h3>Click on the link to verify your email</h3><br /><a href=${process.env.FRONT_URL}/auth/verifEmail/${token}>${process.env.FRONT_URL}/auth/verifEmail/${token}</a>`
+                text: `<h3>Click on the link to verify your email</h3><br /><a href=${process.env.FRONT_URL}/verified/${token}>${process.env.FRONT_URL}/verified/${token}</a>`
             };
             
             mailTransporter.sendMail(mailDetails, function(err, data)
