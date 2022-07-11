@@ -34,3 +34,9 @@ slow_query_log
 long_query_time=1.0
 max_connections=1000
 wait_timeout=130
+[mysqld] 
+innodb=OFF 
+ignore-builtin-innodb 
+skip-innodb
+default-storage-engine=myisam 
+default-tmp-storage-engine=myisam
