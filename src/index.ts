@@ -4,6 +4,8 @@ import cors from "cors";
 import { AuthentificationRoute } from "./routes/AuthentificationRoute"
 import { UserRoute } from "./routes/UserRoute";
 import { PromoRoute } from "./routes/PromoRoute";
+import { ChallengeRoute } from "./routes/ChallengeRoute";
+
 import { config } from "dotenv";
 
 config();
@@ -28,6 +30,7 @@ app.use((req, res, next)=>
 app.use('/auth', AuthentificationRoute);
 app.use('/user', UserRoute);
 app.use('/promo', PromoRoute);
+app.use('/challenge', ChallengeRoute);
 
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);
