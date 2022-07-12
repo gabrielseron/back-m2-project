@@ -9,8 +9,11 @@ const split = (token: string) => { return token.split('Bearer ').join('') }
 export const authAdminMiddleware = async (req: Request, res: Response, next: () => void) =>
 {
     try {
+        console.log(req.headers);
+        console.log(verify(split(req.headers.authorization as string), < string > process.env.JWT_KEY));
         if (req.headers.authorization && verify(split(req.headers.authorization), < string > process.env.JWT_KEY)) {
             const isAdmin = await ( < any > decode(req.headers.authorization)).user.is_admin;
+            console.log(isAdmin);
             if (await (isAdmin)) {
                 next();
             } else {
