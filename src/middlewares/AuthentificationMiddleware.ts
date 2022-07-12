@@ -204,7 +204,7 @@ export const changePasswordMiddleware = async (req: Request, res: Response, next
 {
     let data: any = req.body;
     const champsRequire = [`token`, `password`, `rePassword`]
-
+    console.log(data);
     try
     {
         let error: boolean = true;
@@ -229,8 +229,6 @@ export const changePasswordMiddleware = async (req: Request, res: Response, next
         if (!verify(split(data.token), < string > process.env.JWT_KEY))
             throw new Error(`Invalid Token`)
 
-        console.log('a');
-
         if (await ( < any > decode(data.token)).reason !== 'resetPassword')
             throw new Error(`Invalid Token`)
 
@@ -244,7 +242,8 @@ export const changePasswordMiddleware = async (req: Request, res: Response, next
 
     } catch (error)
     {
-        return res.status(400).json( {error: true, message: (error as any).message}).end();
+        console.log(error);
+        return res.status(401).json( {error: true, message: (error as any).message}).end();
     }
 }
 
