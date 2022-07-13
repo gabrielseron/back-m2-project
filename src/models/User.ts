@@ -1,4 +1,5 @@
 import MySQL from '../db/MySQL';
+import listAttributSelect, { listeTables } from '../utils/listAttributSelect';
 
 export default class User
 {
@@ -13,7 +14,7 @@ export default class User
     protected table: string = 'user';
 
     /**
-     * Creates an instance of Personne.
+     * Creates an instance of User.
      * @param {(User(instance) | null)} id
      * @param {string} [email='']
      * @param {string} [password='']
@@ -96,39 +97,148 @@ export default class User
      *
      * Save to the property in database
      * @returns {Promise < number >}
-     * @memberof Personne
+     * @memberof User
      */
-    // save(): Promise < number > {
-    //     return new Promise((resolve, reject) => {
-    //         MySQL.insert(this.table, this).then((id: number) => {
-    //             this.idpersonne = id;
-    //             console.log(`Save ${this.table}`);
-    //             resolve(id)
-    //         }).catch((err) => {
-    //             console.log(err);
-    //             reject(false)
-    //         })
-    //     })
-    // };
+    save(): Promise < number > {
+        return new Promise((resolve, reject) => {
+            MySQL.insert(this.table, this).then((id: number) => {
+                this.id_user = id;
+                console.log(`Save ${this.table}`);
+                resolve(id)
+            }).catch((err) => {
+                console.log(err);
+                reject(false)
+            })
+        })
+    };
+
+    setToken(user: User, token: any): Promise < number > {
+        return new Promise((resolve, reject) => {
+            MySQL.update('user', user, token).then((id: number) => {
+                this.id_user = id;
+                console.log(`Save ${this.table}`);
+                resolve(id)
+            }).catch((err) => {
+                console.log(err);
+                reject(false)
+            })
+        })
+    }
+
+    verifEmail(): Promise < number > {
+        return new Promise((resolve, reject) => {
+            MySQL.update('user', {id_user: this.id}, {verified_email: 1}).then((id: number) => {
+                this.id_user = id;
+                console.log(`Save ${this.table}`);
+                resolve(id)
+            }).catch((err) => {
+                console.log(err);
+                reject(false)
+            })
+        })
+    }
+
+    changePassword(password: string): Promise < number > {
+        return new Promise((resolve, reject) => {
+            MySQL.update('user', {email: this.email}, {password}).then((id: number) => {
+                this.id_user = id;
+                console.log(`Save ${this.table}`);
+                resolve(id)
+            }).catch((err) => {
+                console.log(err);
+                reject(false)
+            })
+        })
+    }
 
     /************************* STATIC METHOD *************************/
 
-    // static select(where: any) {
-    //     return new Promise((resolve, reject) => {
-    //         MySQL.select('personne', where).then((arrayPersonne: Array < any > ) => {
-    //                 let data: Array < Personne > = [];
-    //                 for (const personne of arrayPersonne) {
-    //                     personne.dateNaiss = new String(personne.dateNaiss)
-    //                     personne.id = personne.idpersonne;
-    //                     data.push(new Personne(personne));
-    //                 }
-    //                 console.log(data);
-    //                 resolve(data)
-    //             })
-    //             .catch((err: any) => {
-    //                 console.log(err);
-    //                 reject(false)
-    //             });
-    //     })
-    // }
+    static select(where: any) {
+        return new Promise((resolve, reject) => {
+            MySQL.select('user', where).then((arrayUser: Array < any > ) => {
+                let data: Array < User > = [];
+                console.log(data);
+                for (const user of arrayUser) {
+                    user.id = user.id_user;
+                    data.push(new User(user, user.email, user.password, user?.verified_email, user.id_promo, user?.id_admin, user?.refresh_token));
+                }
+                resolve(data)
+            })
+            .catch((err: any) => {
+                console.log(err);
+                reject(false)
+            });
+        })
+    }
+
+    static leftJoin(table: listeTables, fk: any, where: any) {
+        return new Promise((resolve, reject) => {
+            MySQL.leftJoin('user', table, fk, where).then((arrayUser: any) => {
+                let data: any = [];
+                console.log(data);
+                for (const user of arrayUser) {
+                    user.id = user.id_user;
+                    data.push(user);
+                }
+                resolve(data)
+            })
+            .catch((err: any) => {
+                console.log(err);
+                reject(false)
+            });
+        })
+    }
+
+    static delete(mail: string)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            MySQL.delete('user', { email: mail }).then(() =>
+            {
+                resolve(true)
+            }).catch((err: any) =>
+            {
+                console.log(err);
+                reject(false)
+            });
+        })
+    }
+
+    static isExiste(mail: string)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            MySQL.select('user', { email: mail }).then((arrayUser: Array < any > ) =>
+            {
+                resolve((arrayUser.length > 0))
+            }).catch((err: any) =>
+            {
+                console.log(err);
+                reject(false)
+            });
+        })
+    }
+
+    static selectAll(id: number, where: any) {
+        return new Promise((resolve, reject) => {
+            MySQL.select('user', where).then((arrayUser: Array < any > ) => {
+                let data: Array < any > = [];
+                console.log(data);
+                for (const user of arrayUser) {
+                    user.id = user.id_user;
+                    data.push({
+                        id_user: user.id_user,
+                        email: user.email,
+                        verified_email: user.verified_email ? true : false,
+                        id_promo: user.id_promo
+                    })
+                }
+                resolve(data)
+            })
+            .catch((err: any) => {
+                console.log(err);
+                reject(false)
+            });
+        })
+    }
 }

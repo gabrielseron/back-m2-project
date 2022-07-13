@@ -52,18 +52,18 @@ export default class Results
      * @returns {Promise < number >}
      * @memberof Results
      */
-    // save(): Promise < number > {
-    //     return new Promise((resolve, reject) => {
-    //         MySQL.insert(this.table, this).then((id: number) => {
-    //             this.idpersonne = id;
-    //             console.log(`Save ${this.table}`);
-    //             resolve(id)
-    //         }).catch((err) => {
-    //             console.log(err);
-    //             reject(false)
-    //         })
-    //     })
-    // };
+    save(): Promise < number > {
+        return new Promise((resolve, reject) => {
+            MySQL.insert(this.table, this).then((id: number) => {
+                this.id_challenge = id;
+                console.log(`Save ${this.table}`);
+                resolve(id)
+            }).catch((err) => {
+                console.log(err);
+                reject(false)
+            })
+        })
+    };
 
     /************************* STATIC METHOD *************************/
 
@@ -85,4 +85,30 @@ export default class Results
     //             });
     //     })
     // }
+
+    static isExiste(id: any)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            MySQL.select('results', { id_user: id }).then((arrayUser: Array < any > ) =>
+            {
+                resolve((arrayUser.length > 0))
+            }).catch((err: any) =>
+            {
+                console.log(err);
+                reject(false)
+            });
+        })
+    }
+
+    static setScore(results: any, score: any): Promise < number > {
+        return new Promise((resolve, reject) => {
+            MySQL.update('results', results, score).then((id: number) => {
+                resolve(id)
+            }).catch((err) => {
+                console.log(err);
+                reject(false)
+            })
+        })
+    }
 }
