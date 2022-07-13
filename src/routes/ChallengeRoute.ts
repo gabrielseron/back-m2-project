@@ -11,5 +11,6 @@ route.get('/', (req: Request, res: Response) =>
 })
 
 route.post('/', challengeMiddleware, ChallengeController.execute)
+route.post('/test', challengeMiddleware, ChallengeController.isConnected)
 
 export { route as ChallengeRoute };

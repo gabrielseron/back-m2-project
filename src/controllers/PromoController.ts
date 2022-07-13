@@ -41,7 +41,8 @@ export class PromoController
             if (!await Promo.isExiste('id_promo', id))
                 throw new Error(`Promo don't exist`)
 
-            users = await User.selectAll(id, {id_promo: id});
+            // users = await User.selectAll(id, {id_promo: id});
+            users = await User.leftJoin('results', {'user.id_user': 'results.id_user'}, { id_promo : id })
             return res.status(201).json({users});
         } catch (error) {
             return res.status(401).json({ error: true, message: `An error has occured : ${error}` }).end();
