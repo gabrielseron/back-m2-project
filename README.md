@@ -83,3 +83,108 @@ Un GUI simple à utiliser, en ionic.
 
 Possibilité d’exporter les résultats globaux d’un challenge en fichier excel depuis le front.
 
+## Routes
+Explication des routes :
+
+- #### Test de connexion à l'instance
+
+http://localhost:5050/challenge/test
+```
+POST {
+	"host": "IP.de.L.instance",
+	"username": "eleve1",
+	"token": "suitedecaractere"
+}
+```
+
+- #### Lancement du challenge
+
+http://localhost:5050/challenge
+
+```
+POST {
+	"host": "IP.de.L.instance",
+	"username": "eleve1",
+	"token": "suitedecaractere"
+}
+```
+
+- #### Ajout de promotions
+
+http://localhost:5050/promo
+
+```
+POST {
+	"promo_name": "str"
+}
+```
+
+- #### Liste des promotions
+
+http://localhost:5050/promo
+
+```
+GET http://localhost:5050/promo
+```
+
+- #### Liste des étudiants d'une promotion
+
+http://localhost:5050/promo/{id_promotion}
+
+```
+GET http://localhost:5050/promo/{id_promotion}
+```
+
+- #### Inscription d'un élève
+
+http://localhost:5050/auth/register
+
+```
+POST {
+	"email": "email@gmail.com",
+	"password": "password",
+	"rePassword": "password",
+	"id_promo": id_promotion
+}
+```
+
+- #### Vérification du compte par email
+
+http://localhost:5050/auth/verifEmail/token
+
+```
+GET http://localhost:5050/auth/verifEmail/token
+```
+
+- #### Connexion d'un utilisateur (users & admins)
+
+http://localhost:5050/auth/login
+
+```
+POST {
+	"email": "email@gmail.com",
+	"password": "password"
+}
+```
+
+- #### Réinitialisation du mot de passe
+
+http://localhost:5050/auth/resetPassword
+
+```
+POST {
+	"email": "email@gmail.com"
+}
+```
+
+- #### Changement du mot de passe
+
+http://localhost:5050/auth/resetPassword
+
+```
+PUT {
+	"token": "suitedecaractere",
+	"password": "password",
+	"rePassword": "password"
+}
+```
