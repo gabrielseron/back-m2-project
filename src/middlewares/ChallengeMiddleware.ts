@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 export const challengeMiddleware = async (req: Request, res: Response, next: () => void) =>
 {
     let data: any = req.body;
-    const champsRequire = [`privateKey`, `host`, `username`]
+    const champsRequire = [`privateKey`, `host`, `username`, `token`]
 
     try
     {

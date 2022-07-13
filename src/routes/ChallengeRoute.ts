@@ -10,6 +10,6 @@ route.get('/', (req: Request, res: Response) =>
     return res.end('<h1>Connected</h1>')
 })
 
-route.post('/', authMiddleware, challengeMiddleware, ChallengeController.execute)
+route.post('/', challengeMiddleware, ChallengeController.execute)
 
 export { route as ChallengeRoute };

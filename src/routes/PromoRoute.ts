@@ -5,7 +5,7 @@ import { GetPromoUsersMiddleware, PostPromoMiddleware } from '../middlewares/Pro
 const route: Router = Router();
 
 route.get('/', PromoController.getAll);
-route.get('/:id', authAdminMiddleware, GetPromoUsersMiddleware, PromoController.getUsers);
-route.post('/', authAdminMiddleware, PostPromoMiddleware, PromoController.create);
+route.get('/:id', GetPromoUsersMiddleware, PromoController.getUsers);
+route.post('/', PostPromoMiddleware, PromoController.create);
 
 export { route as PromoRoute };

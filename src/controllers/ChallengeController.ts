@@ -16,7 +16,7 @@ export class ChallengeController
         let user: any;
         let result: any;
         try {
-            user = await ( < any > decode(req.headers.authorization as string)).user;
+            user = await ( < any > decode(data.token as string)).user;
 
             const ssh = new NodeSSH();
 
