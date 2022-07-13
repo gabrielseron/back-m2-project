@@ -60,7 +60,7 @@ export class ChallengeController
 
         try {
             await exerciseOne()
-            return res.status(401).json({connected: true}).end();
+            return res.status(201).json({connected: true}).end();
         } catch (error) {
             console.log(error);
             console.log(score);
@@ -99,7 +99,7 @@ export class ChallengeController
                                 console.log('STDERR: ' + data);
                             })
                         });
-                        score = 1;
+                        score = 10;
                         resolve({error: false})
                     }).connect(connConfig);
                     conn.on('error', (err: any) => {
@@ -116,15 +116,19 @@ export class ChallengeController
         
         function exerciseTwo() {
             return new Promise((resolve, reject) => {
-                score = 6;
-                reject ({error: true})
-            })
-        }
-        
-        function exerciseThree() {
-            return new Promise((resolve, reject) => {
-                score = 8;
-                reject ({score})
+                try {
+                    const filePath = path.join('/content/', 'subfolder', 'hello.txt');
+                    const baseContent = path.basename(filePath);
+                    if (baseContent == 'hello.txt') {
+                        console.log(`Well done the txt file is right! \n the next exercises are planned in a DLC that will be released very soon!`);
+                        score = 20;
+                    } else {
+                        reject ({ error: true, score, tips: "Le fichier hello.txt n'existe pas ou n'est pas au bon emplacement !" })
+                    }
+                    reject ({error: false, score})
+                } catch (err: any) {
+                    reject ({ error: true, message: `An error has occured : ${err.message}`, score, tips: "Le fichier hello.txt n'existe pas ou n'est pas au bon emplacement !" })
+                }
             })
         }
 
@@ -132,7 +136,6 @@ export class ChallengeController
         try {
             await exerciseOne()
             await exerciseTwo()
-            await exerciseThree()
         } catch (error) {
             const user = await ( < any > decode(data.token)).user
             console.log(user);
