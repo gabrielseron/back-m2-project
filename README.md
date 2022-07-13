@@ -57,7 +57,7 @@ Voici ce que comprend ce projet :
 - #### Inscription et connexion
 
 Géré par un middleware et un controller, tous deux dédiés.
-Lorsque l’élève s’inscrit, il doit également rensigner sa promotion, gérée par une autre paire de middleware + controllers dédiés.
+Lorsque l’élève s’inscrit, il doit également rensigner sa promotion, gérée par une autre paire de middleware + controller dédiés.
 
  - #### Sécurité et gardes fou
 
@@ -65,7 +65,7 @@ Bien évidemment, on vérifie la validité de l’adresse E-mail renseignée, la
 
 - #### Promotions
 
-L’élève doit la renseigner de bonne fois, néanmoins il lui est impossible d’en créer de nouvelles, seul le compte admin peu et doit donc les renseigner. 
+L’élève doit la renseigner de bonne foi, néanmoins il lui est impossible d’en créer de nouvelles, seul le compte admin peut et donc doit les renseigner. 
 
  - #### Users & admins
 
@@ -73,7 +73,7 @@ On différencit les élèves des profs, considérant les élèves comme de simpl
 
 - #### Les Challenges
 
-Connexion aux instances des élèves via ssh, puis test de leurs instances et leurs configurations. Géré par une paire de controller + middleware dédiée. Plusieurs exercices par challenge, le résultat de chaque challenge est indépendant.
+Connexion aux instances des élèves via ssh, puis test de leurs instances et leurs configurations. Géré par une paire de controller + middleware dédiés. Plusieurs exercices par challenge, le résultat de chaque challenge est indépendant.
 
  - #### Le front-end
 
